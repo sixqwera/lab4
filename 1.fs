@@ -14,11 +14,11 @@ let rec recPrint tree =
         recPrint right 
     | Empty -> ()
 
-let rec treeMap f tree =
+let rec Map f tree =
     match tree with
 
     | Node (data, left, right) -> 
-        Node (f data, treeMap f left, treeMap f right)
+        Node (f data, Map f left, Map f right)
     | Empty -> Empty
 
 let rnd = Random()
@@ -37,9 +37,9 @@ let main argv =
     printfn "--- Исходное дерево  ---"
     recPrint binTree
 
-    let incrementedTree = treeMap (fun x -> if x = 9 then 9 else x + 1) binTree
+    let fixedTree = Map (fun x -> if x = 9 then 9 else x + 1) binTree
 
     printfn "\n--- После изменения  ---"
-    recPrint incrementedTree
+    recPrint fixedTree
     
     0
