@@ -26,4 +26,22 @@
 
 
 
+![Uploading image.png…]()
+Файл не грузит, прекрепляю письменные тесты 
+
+--- Исходное дерево  ---
+Node 2
+Node 5
+Node 5
+Node 1
+Node 8
+
+--- После изменения  ---
+Node 3
+Node 6
+Node 6
+Node 2
+Node 9
+
+
 
