@@ -36,7 +36,7 @@ let rec getValidCount() =
 
     | true, v when v > 0 -> v  
     | _ -> 
-        printfn "Ошибка: нужно ввести целое положительное число!"
+        printfn "Ошибка: нужно ввести целое положительное число"
         getValidCount() 
 
 [<EntryPoint>]
@@ -45,14 +45,16 @@ let main argv =
     let count = getValidCount()
 
     let sourceList = List.init count (fun _ -> rnd.Next(0, 10))
-    let binTree = List.fold (fun acc x -> insert x acc) Empty sourceList
+    let binTree =
+        List.fold (fun acc x -> insert x acc) Empty sourceList
 
-    printfn "\n--- Исходное дерево ---"
+    printfn "\n--- Исходное дерево (повернуто набок) ---"
     recPrint "" binTree
 
-    let updatedTree = treeMap (fun x -> if x = 9 then 9 else x + 1) binTree
+    let updatedTree = 
+        treeMap (fun x -> if x = 9 then 9 else x + 1) binTree
 
-    printfn "\n--- После обработки ---"
+    printfn "\n--- После обработки (+1 к значениям) ---"
     recPrint "" updatedTree
     
     0
