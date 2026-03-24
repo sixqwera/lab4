@@ -5,41 +5,54 @@ type Tree =
     | Node of int * Tree * Tree 
     | Empty
 
-let rec recPrint tree = 
+let rec recPrint indent tree = 
     match tree with 
 
     | Node (data, left, right) -> 
-        recPrint left
-        printfn "Node %d" data
-        recPrint right 
+        recPrint (indent + "    ") right
+        printfn "%s%d" indent data
+        recPrint (indent + "    ") left
     | Empty -> ()
 
-let rec Map f tree =
+let rec insert value tree =
+    match tree with
+
+    | Empty -> Node(value, Empty, Empty)
+    | Node(x, left, right) ->
+        if value < x then Node(x, insert value left, right)
+        else Node(x, left, insert value right)
+
+let rec treeMap f tree =
     match tree with
 
     | Node (data, left, right) -> 
-        Node (f data, Map f left, Map f right)
+        Node (f data, treeMap f left, treeMap f right)
     | Empty -> Empty
 
-let rnd = Random()
+let rec getValidCount() =
+    printf "Введите количество элементов дерева: "
+    let input = Console.ReadLine()
+    match Int32.TryParse(input) with
 
-let binTree =
-    Node(rnd.Next(0, 10),
-        Node(rnd.Next(0, 10), Empty, Empty),
-        Node(rnd.Next(0, 10),
-            Node(rnd.Next(0, 10), Empty, Empty),
-            Node(rnd.Next(0, 10), Empty, Empty)
-        )
-    )
+    | true, v when v > 0 -> v  
+    | _ -> 
+        printfn "Ошибка: нужно ввести целое положительное число!"
+        getValidCount() 
 
 [<EntryPoint>]
 let main argv =
-    printfn "--- Исходное дерево  ---"
-    recPrint binTree
+    let rnd = Random()
+    let count = getValidCount()
 
-    let fixedTree = Map (fun x -> if x = 9 then 9 else x + 1) binTree
+    let sourceList = List.init count (fun _ -> rnd.Next(0, 10))
+    let binTree = List.fold (fun acc x -> insert x acc) Empty sourceList
 
-    printfn "\n--- После изменения  ---"
-    recPrint fixedTree
+    printfn "\n--- Исходное дерево ---"
+    recPrint "" binTree
+
+    let updatedTree = treeMap (fun x -> if x = 9 then 9 else x + 1) binTree
+
+    printfn "\n--- После обработки ---"
+    recPrint "" updatedTree
     
     0
